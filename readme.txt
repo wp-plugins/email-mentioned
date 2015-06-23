@@ -54,11 +54,9 @@ Yes.
 1. Admin Menu (EN) showing customization options.
 2. Admin Menu (ES) showing customization options.
 
-
-
 == Changelog ==
 
-= 0.1 =
+= 1.0 =
 * First version
 * Langs: EN, ES, FR
 
