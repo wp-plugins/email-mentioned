@@ -39,6 +39,10 @@ This plugin is I18N ok.
 2. Go to plugins Tab and activate it.
 3. Customize it in email-mentioned tab.
 
+== Screenshots ==
+
+1. Admin Menu (EN) showing customization options.
+2. Admin Menu (ES) showing customization options.
 
 == Frequently Asked Questions ==
 
