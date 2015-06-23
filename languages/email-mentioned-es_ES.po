@@ -1,0 +1,73 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: email-mentioned\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-18 16:49+0200\n"
+"PO-Revision-Date: 2015-06-18 16:55+0100\n"
+"Last-Translator: Raúl <raulanton@gmail.com>\n"
+"Language-Team: Raúl Antón Cuadrado <raulanton@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"Language: es_ES\n"
+
+#: email-mentioned.php:81
+#, php-format
+msgid "%1$s mentioned you in %2$s!"
+msgstr "%1$s te mencionó en %2$s!"
+
+#: email-mentioned.php:89
+#, php-format
+msgid "%1$s said in %2$s : <<%3$s>> "
+msgstr "%1$s dijo en %2$s : <<%3$s>> "
+
+#: email-mentioned.php:92
+#, php-format
+msgid "%1$s mentioned you in %2$s! "
+msgstr "%1$s te mencionó en %2$s!"
+
+#: email-mentioned.php:95
+msgid "If you would like to read the whole comment or answer it, click here: "
+msgstr "Si quieres leer el comentario completo o responder, haz click aquí:"
+
+#: email-mentioned.php:231
+msgid "Mention qualifier "
+msgstr "Qualificador de menciones"
+
+#: email-mentioned.php:236
+msgid ""
+"What do you want to use as mentions indicator? (You need to prefix with it "
+"the username to be mentioned.) : "
+msgstr ""
+"Qué quieres usar como indicador de mención? (Necesitarás usarlo como prefijo "
+"al username que quieres mencionar.)"
+
+#: email-mentioned.php:243
+msgid "Email scheme "
+msgstr "Esquema del email"
+
+#: email-mentioned.php:246
+msgid "Email header : "
+msgstr "Cabecera del email:"
+
+#: email-mentioned.php:251
+msgid "Email footer : "
+msgstr "Pie del email:"
+
+#: email-mentioned.php:259
+msgid "Should the whole comment be included in the email? : "
+msgstr "¿Debiera incluirse el comentario completo en el email?"
+
+#: email-mentioned.php:266
+msgid "Would you like to include a link to mentioner in email? : "
+msgstr "¿Querrías incluir en el email un link a quien realizó la mención?"
+
+#: email-mentioned.php:271
+msgid "Save changes"
+msgstr "Guardar cambios"
