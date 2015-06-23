@@ -9,14 +9,13 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-Email Mentioned is a customizable -no coding needed- plugin to send an email to each user mentioned in comments.
+Email Mentioned is a lightweight customizable -no coding needed- plugin to send an email to each user mentioned in comments.
 
 
 == Description ==
 
 
-
-This plugin send a customizable email to each user mentioned in a comment.
+This ultra lightweight plugin send a customizable email to each user mentioned in a comment.
 
 Mentions:
 
