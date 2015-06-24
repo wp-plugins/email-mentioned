@@ -1,7 +1,7 @@
-=== Email Mentioned ===
+﻿=== Email Mentioned ===
 
 Contributors: raulanton
-Tags: comments, mention, mentions, email, referencia, menci�n
+Tags: comments, mention, mentions, email, referencia, mención, mentioned, mail, warn
 Requires at least: 4.1.5
 Tested up to: 4.1.5
 Stable tag: 4.3
@@ -20,16 +20,18 @@ This ultra lightweight plugin send a customizable email to each user mentioned i
 Mentions:
 
 A mention is an username preceded by the mention qualifier. This qualifier could be a character but also a string. 
-The dafault qualifier is '@' to work as in Twitter, but it could be changed to be '#' or even 'TO:' in administration menu.
+The default qualifier is '@' to work as in Twitter, but it could be changed via admin menu to be '#' or even an string like 'Mention:' .
 
 Email:
 
-The email could be customized to include or not the whole comment in wich the mention is and a reference to the mentioner.
-It is also possible to define the email header and footer.
+The email can be customized to include or not the whole comment in wich the mention is.
+The email can be customized to add a reference to the mentioner profile at the site.
+It is also possible to define email header and footer.
 
 I18N:
 
-This plugin is I18N ok.
+This plugin is I18N (es_ES, en_US, fr_FR)
+Any help with translations will be nice!
 
 
 == Installation ==
@@ -45,7 +47,7 @@ This plugin is I18N ok.
 = Could I see an example webpage using this plugin =
 Yes, feel free to cocreate at eseeusee.com
 
-= could I use strings as mentions qualifier/prefix? =
+= Could I use strings as mentions qualifier/prefix? =
 Yes.
 
 == Screenshots ==
@@ -58,4 +60,7 @@ Yes.
 = 1.0 =
 * First version
 * Langs: EN, ES, FR
-
+= 1.01 =
+* Little bugs fixed
+* Optimized DB queries
+* Added comments on code

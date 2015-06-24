@@ -1,13 +1,11 @@
-﻿<?php
+<?php
 /*
 Plugin Name: Email Mentioned
 Plugin URI: http://wordpress.org/extend/plugins/XXXXXXXXX
 Description: Send a customizable email to each user mentioned in a comment. The mention character/string is also customizable (for instance @, like in Twitter).
-	Código original <a href="http:eseeusee.com"> aquí </a> . 
-	Más explicaciónes <a href="http:eseeusee.com"> aquí </a>.
-Version: 1.0
+Version: 1.01
 Author: Raúl Antón Cuadrado
-Author URI: http://comunicacionextendida.com
+Author URI: http://about.me/raulanton
 Text Domain: email-mentioned
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -28,6 +26,19 @@ Domain Path: /languages
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+/*
+* function antonem_install
+*
+* 	Create custom variables and fix default values.
+*
+*	wp_antonem_prefix : Prefix used to mark a mention. Default to "@". It could be a string, for instance "MENT:"
+*	wp_antonem_mailheader : First content of the email sent to those participants mentioned
+*	wp_antonem_mailfooter : Last lines of the email sent to those participants mentioned 
+*	wp_antonem_comment_in_mail : (YES|NO) Include the whole comment in the email sent
+*	wp_antonem_link2commenter_in_mail : (YES|NO) Include a link to profile of mentioner in the email sent
+*
 */
 
 if ( ! function_exists('antonem_install') ) :
@@ -69,52 +80,69 @@ add_action( 'plugins_loaded', 'antonem_load_plugin_textdomain' );
 if ( ! function_exists('antonem_sendmail') ) :
 function antonem_sendmail($comment_id, $approval_status=" "){
 
-	$prefix_name = 'wp_antonem_prefix'; /*Recupera el qualifier o prefijo de cita*/
+	//Get customization values
+	//wp_antonem_prefix : Prefix used to mark a mention.
+	$prefix_name = 'wp_antonem_prefix'; 
         $qualifier = get_option( $prefix_name );
-        $mailheader_name = 'wp_antonem_mailheader';
+        //wp_antonem_mailheader : First content of the email sent to those participants mentioned
+	$mailheader_name = 'wp_antonem_mailheader';
         $mailheader_val = get_option( $mailheader_name ); 
+	//wp_antonem_mailfooter : Last lines of the email sent to those participants mentioned
         $mailfooter_name = 'wp_antonem_mailfooter';
         $mailfooter_val = get_option( $mailfooter_name ); 
+	//wp_antonem_comment_in_mail
         $comment_in_mail_name = 'wp_antonem_comment_in_mail';
         $comment_in_mail_val = get_option( $comment_in_mail_name ); 
+	//wp_antonem_link2commenter_in_mail
         $link2commenter_in_mail_name = 'wp_antonem_link2commenter_in_mail';
         $link2commenter_in_mail_val = get_option( $link2commenter_in_mail_name ); 
 
+	// Get comment_id and commenter display_name
 	$comment = get_comment( $comment_id );
 	$commenter = get_userdata($comment->user_id)->display_name;
-	$commenter_link = "http://www.eseeusee.com/author/".get_userdata($comment->user_id)->user_login;
 
-	$the_subject = sprintf( __('%1$s mentioned you in %2$s!', 'email-mentioned'),$commenter, "eseeusee" );
+	// Get an array with all the people cited
+	$people_mentioned_d = preg_split("/[\s,]+/", $comment->comment_content);	
+	$people_mentioned = array_unique((preg_grep("/^".$qualifier.".*/", $people_mentioned_d)));
 
-	$people_cited_d = preg_split("/[\s,]+/", $comment->comment_content);	
-	$people_cited = array_unique((preg_grep("/^".$qualifier.".*/", $people_cited_d)));
-
-	$the_message .= $mailheader_val . "\r\n\r\n"; 
-
-	if ($comment_in_mail_val=="YES"){
-	$the_message .= sprintf( __('%1$s said in %2$s : <<%3$s>> ', 'email-mentioned'),$commenter, "eseeusee" , $comment->comment_content );
-	}
-	else{
-	$the_message .= sprintf( __('%1$s mentioned you in %2$s! ', 'email-mentioned'),$commenter, "eseeusee" );
-	}
-
-	$the_message .= "\r\n" . __('If you would like to read the whole comment or answer it, click here: ', 'email-mentioned');
-	$the_message .= get_permalink( $comment->comment_post_ID ) . '#comment-' . $comment_id ;
-
-	if ($link2commenter_in_mail_val=="YES"){
-	$the_message .= "\r\n" . "And, if you want to know more about who mentioned you, here: ".$commenter_link;
-	}
-
-	$the_message .= "\r\n\r\n" . $mailfooter_val; 
+	if (count($people_mentioned)>0){
 
 
-	foreach($people_cited as $citado)
-	{
-	    $email= get_userdata(antonem_userid_by_displayname(substr($citado, 1)))->user_email;
-	    	if ($email != "")
-		{
-	        wp_mail( $email, $the_subject, $the_message  );
+		// Compose the email subject
+		$the_subject = sprintf( __('%1$s mentioned you in %2$s!', 'email-mentioned'),$commenter, "eseeusee" );
+
+		//Compose the message 
+		$the_message .= $mailheader_val . "\r\n\r\n"; 
+
+		if ($comment_in_mail_val=="YES"){
+			$the_message .= sprintf( __('%1$s said in %2$s : <<%3$s>> ', 'email-mentioned'),$commenter, "eseeusee" , $comment->comment_content );
+		}else{
+			$the_message .= sprintf( __('%1$s mentioned you in %2$s! ', 'email-mentioned'),$commenter, "eseeusee" );
 		}
+
+		$the_message .= "\r\n" . __('If you would like to read the whole comment or answer it, click here: ', 'email-mentioned');
+		$the_message .= get_permalink( $comment->comment_post_ID ) . '#comment-' . $comment_id ;
+
+		if ($link2commenter_in_mail_val=="YES"){
+			$commenter_link = "http://www.eseeusee.com/author/".get_userdata($comment->user_id)->user_login;
+			$the_message .= "\r\n" . "And, if you want to know more about who mentioned you, here: ".$commenter_link;
+		}
+
+		$the_message .= "\r\n\r\n" . $mailfooter_val; 
+
+
+		//Send the message to each one mentioned
+		foreach($people_mentioned as $participant_mentioned)
+		{
+		    $email= get_userdata(antonem_userid_by_displayname(substr($participant_mentioned, 1)))->user_email;
+		    	if ($email != "")
+			{
+		        wp_mail( $email, $the_subject, $the_message  );
+			}
+		}
+
+
+
 	}
 }
 add_action('comment_post', 'antonem_sendmail');
@@ -125,18 +153,31 @@ add_action('comment_post', 'antonem_sendmail');
 * EN: Get user id from display_name
 * FR: Recupere l'id d'user a partir du display_name.
 * 
-* Original source
-* http://wordpress.stackexchange.com/questions/90512/how-we-can-get-the-user-id-by-its-display-name
+* @param    String 	$display_name     Display name of participant whose ID is needed.
+* @return   integer   	$id        	  ID of participant corresponding to $display_name
 */
 function antonem_userid_by_displayname( $display_name ) {
-    global $wpdb;
 
-    if ( ! $user = $wpdb->get_row( $wpdb->prepare(
-        "SELECT `ID` FROM $wpdb->users WHERE `display_name` = %s", $display_name
-    ) ) )
-        return false;
 
-    return $user->ID;
+    $user_query = new WP_User_Query( array( 
+				'meta_key' => 'display_name', 
+				'meta_value' => $display_name,
+				'fields' => 'ID',
+				'number' => 1  
+				) );
+
+    $ids = $user_query->get_results();
+
+    if (!empty($ids)) {
+	
+	return $ids[0];
+    	
+	
+    } else {
+	return false;
+    }
+
+
 }
 
 endif;
@@ -144,8 +185,8 @@ endif;
 /*
 *
 * ES: Adminstración y opciones 
-* EN: 
-* FR: 
+* EN: Adminstration and options
+* FR: Administration et options
 * 
 * 
 */
@@ -221,7 +262,7 @@ if(!current_user_can('manage_options')) {
 
 
 	        echo "<div class='updated'><p><strong>";
-		echo "¡Ok esos cambios!"; 	
+		echo "Ok those changes! / ¡Ok esos cambios! / C'est ok l'actualisation!"; 	
 	  	echo "</strong></p></div>";
 
          } ?>
